@@ -52,7 +52,7 @@ void *start_generate_hidato (void *sem_id)
 void send_msg_to_solver(int w, int h, vector< vector<int> > &map)
 {
     ofstream out;
-    out.open("./../result/quize.txt");
+    out.open(F_QUIZE);
 
     out << h << " " << w << endl;
 

@@ -52,7 +52,7 @@ bool check_duplication(vector< vector<int> > &ans)
 void send_msg_to_generator(vector< vector<int> > &ans)
 {
     ofstream out;
-    out.open("./../result/answer.txt");
+    out.open(F_ANSWER);
 
     for (int i = 0; i < (int)ans.size(); ++i) {
         for (int j = 0; j < (int)ans[0].size(); ++j) {
