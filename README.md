@@ -1,2 +1,2 @@
 # HidatoPuzzle-Auto-Generator-Solver
-Hidato Puzzle Auto generatin and solving
+Hidato Puzzle Auto generating and solving
