@@ -3,28 +3,27 @@
 void *start_solver_hidato (void *sem_id)
 {
     sem_t *sem = (sem_t *)sem_id;
-    sem_t generator = sem[0];
-    sem_t solver = sem[1];
+    sem_t *generator = &sem[0];
+    sem_t *solver = &sem[1];
 
     vector< vector<int> > ans;
     
-    bool check;
+    bool check = false;
 
     while (1) {
-        sem_wait(&solver);
+        sem_wait(solver);
         
         check = check_duplication(ans);
         if (check == true) {
             cout << "\n This hidato pulzzle has not unique solution \n";
             send_msg_to_generator(ans);
-            sem_post(&generator);
+            sem_post(generator);
             /* exit function */
             return NULL;
         }
 
         solve_hidato_puzzle(ans);
-        
-        sem_post(&generator);
+        sem_post(generator);
     }
 }
 
@@ -38,6 +37,7 @@ void solve_hidato_puzzle(vector< vector<int> > &ans)
 
 bool check_duplication(vector< vector<int> > &ans)
 {
+    bool check = false;
     /* TODO */
 
     /* check duplicate
@@ -45,6 +45,8 @@ bool check_duplication(vector< vector<int> > &ans)
      *     => return 0;
      * if this hidato is not unique
      *     => write -1 to ans array  and return 1 */
+
+    return check;
 }
 
 void send_msg_to_generator(vector< vector<int> > &ans)

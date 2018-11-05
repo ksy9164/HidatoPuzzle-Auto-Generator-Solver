@@ -13,7 +13,7 @@ int main(void)
     
     pthread_create(&p_thread[0], NULL, start_generate_hidato,(void *)&sem_id);
     pthread_create(&p_thread[1], NULL, start_solver_hidato,(void *)&sem_id);
-
+    
     pthread_join(p_thread[0],(void **)&status);
     pthread_join(p_thread[1],(void **)&status);
 
