@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <vector>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 

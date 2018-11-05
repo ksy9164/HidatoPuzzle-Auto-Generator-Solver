@@ -10,8 +10,7 @@ void *start_solver_hidato (void *sem_id)
     
     bool check;
 
-    while (1)
-    {
+    while (1) {
         sem_wait(&solver);
         
         check = check_duplication(ans);
@@ -20,16 +19,16 @@ void *start_solver_hidato (void *sem_id)
             send_msg_to_generator(ans);
             sem_post(&generator);
             /* exit function */
-            return (void *)check;
+            return NULL;
         }
 
-        solve_hidato_puzzle(&generator, &solver, ans);
+        solve_hidato_puzzle(ans);
         
         sem_post(&generator);
     }
 }
 
-void solve_hidato_puzzle(sem_t *generator, sem_t *solver, vector< vector<int> > &ans)
+void solve_hidato_puzzle(vector< vector<int> > &ans)
 {
     /* TODO */
     /* open quize.txt and solve the hidato
@@ -51,7 +50,7 @@ bool check_duplication(vector< vector<int> > &ans)
 void send_msg_to_generator(vector< vector<int> > &ans)
 {
     ofstream out;
-    out.open("answer.txt");
+    out.open("./../result/answer.txt");
 
     for (int i = 0; i < (int)ans.size(); ++i) {
         for (int j = 0; j < (int)ans[0].size(); ++j) {
@@ -60,5 +59,6 @@ void send_msg_to_generator(vector< vector<int> > &ans)
         out << endl;
     }
 
+    out.close();
     return ;
 }
