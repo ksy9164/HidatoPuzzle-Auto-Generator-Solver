@@ -23,6 +23,7 @@ void *start_solver_hidato (void *sem_id)
         }
 
         solve_hidato_puzzle(ans);
+        send_msg_to_generator(ans);
         sem_post(generator);
     }
 }
