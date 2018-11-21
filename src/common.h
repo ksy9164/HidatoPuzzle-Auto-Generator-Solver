@@ -9,7 +9,9 @@
 #include <vector>
 #include <fstream>
 #include <time.h>
-
+#include <cstdlib>
+#include <queue>
+#include <cstring>
 using namespace std;
 
 #define F_QUIZE "./../result/quize.txt"
