@@ -12,7 +12,7 @@ void *start_solver_hidato (void *sem_id)
 
     while (1) {
         sem_wait(solver);
-        
+        sleep(1);
         check = check_duplication(ans);
         if (check == true) {
             cout << "\n This hidato pulzzle has not unique solution \n";
@@ -30,12 +30,87 @@ void *start_solver_hidato (void *sem_id)
 
 void solve_hidato_puzzle(vector< vector<int> > &ans)
 {
-    /* TODO */
-    /* open quize.txt and solve the hidato
-     * if this function solves generator's quize
-     * than you have to use send_msg_to_gernerator function to write answer.txt file */
+    ifstream in;
+    in.open(F_QUIZE);
+    int h, w;
+    int cnt_block = 0;
+    bool solving_puzzle = false;
+    in >> h >> w;
+    vector< vector<int> > quize;
+
+    ans.resize(h,vector<int>(w,0));
+    quize.resize(h,vector<int>(w,0));
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            in >> quize[i][j];
+            if (quize[i][j] != 0)
+                cnt_block++;
+        }
+    }
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            if (quize[i][j] == -1 || quize[i][j] == 1)
+                check_hidato(i, j, h, w, cnt_block, 1, solving_puzzle, quize, ans);
+            if (solving_puzzle)
+                goto done;
+        }
+    }
+
+done : 
+    cout << "---- This is solver!! ----\n";
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            cout << ans[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "--------------------------\n";
+    cout << "--------------------------\n";
 }
 
+void check_hidato(int y, int x, int w, int h, int cnt_block, int cnt, bool &solving_puzzle, vector< vector<int> > &quize, vector< vector<int> > &ans)
+{
+    /* if solved? */
+    if (solving_puzzle)
+        return;
+    
+    /* check is it valuable? */
+    if (quize[y][x] != -1 && quize[y][x] != cnt)
+        return;
+    
+    bool map_valid = false;
+    if (quize[y][x] == cnt)
+        map_valid = true;
+
+    quize[y][x] = cnt;
+
+    if (cnt == cnt_block) {
+        solving_puzzle = true;
+        for (int i = 0; i < h; ++i)
+            for (int j = 0; j < w; j++)
+                ans[i][j] = quize[i][j];
+        return;
+    }
+
+    int tx,ty;
+    int x_pos[8] = {-1,-1,-1,0,0,1,1,1};
+    int y_pos[8] = {1,0,-1,1,-1,1,0,-1};
+
+    for (int i = 0; i < 8; i++) {
+        tx = x_pos[i] + x;
+        ty = y_pos[i] + y;
+        if (ty < 0 || tx < 0 || tx >= w || ty >= h )
+            continue;
+        else
+            check_hidato(ty, tx, w, h, cnt_block, cnt + 1, solving_puzzle, quize, ans);
+    }
+    if (map_valid)
+        quize[y][x] = cnt;
+    else
+        quize[y][x] = -1;
+}
 bool check_duplication(vector< vector<int> > &ans)
 {
     bool check = false;
@@ -54,7 +129,7 @@ void send_msg_to_generator(vector< vector<int> > &ans)
 {
     ofstream out;
     out.open(F_ANSWER);
-
+    out << ans.size() << " " << ans[0].size() << "\n";
     for (int i = 0; i < (int)ans.size(); ++i) {
         for (int j = 0; j < (int)ans[0].size(); ++j) {
             out << ans[i][j] << " ";

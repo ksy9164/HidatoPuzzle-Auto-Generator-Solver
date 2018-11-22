@@ -14,17 +14,22 @@ void *start_generate_hidato (void *sem_id)
     int iter = 0;
     int check = 1;
     vector< vector<int> > map;
+    vector< vector<int> > puzzle;
 
     srand((unsigned int)time(NULL));
     while (1) {
         sem_wait(generator);
         end = clock();
-        check = check_answer(w,h,map);
+        sleep(1);
+        if (iter > 0)
+            check = check_answer(w,h,map);
         if (check == 0) {
             cout << "\n It is wrong answer ";
+            fflush(stdout);
             return NULL;
         } else if (check == -1) {
             cout << "\n duplicated sollution !! \n";
+            fflush(stdout);
             return NULL;
         }
         if (iter != 0) {
@@ -36,11 +41,10 @@ void *start_generate_hidato (void *sem_id)
         
         switch (GENERATOR_HANDLE) {
             case 0:
-                generate_not_unique_hidato(w,h,map);
+                generate_not_unique_hidato(w,h,map,puzzle);
                 break;
             case 1:
-                generate_hidato(w,h,map);
-                return NULL;
+                generate_hidato(w,h,map,puzzle);
                 break;
         }
         send_msg_to_solver(w,h,map);
@@ -49,7 +53,7 @@ void *start_generate_hidato (void *sem_id)
         iter++;
     }
 }
-void send_msg_to_solver(int w, int h, vector< vector<int> > &map)
+void send_msg_to_solver(int w, int h, vector< vector<int> > &puzzle)
 {
     ofstream out;
     out.open(F_QUIZE);
@@ -58,20 +62,28 @@ void send_msg_to_solver(int w, int h, vector< vector<int> > &map)
 
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
-            out << map[i][j] << " ";        
+            out << puzzle[i][j] << " ";        
         }
         out << endl;
     }
 }
 int check_answer(int w, int h, vector< vector<int> > &map)
 {
-    int answer = 1;
-    /* TODO */
-    /* open answer.txt and compare between map array */
+    ifstream in;
+    in.open(F_ANSWER);
 
-    return answer;
+    int t;
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            in >> t;
+            if (t != map[i][j]) {
+                return 0;
+            }
+        } 
+    }
+    return 1;
 }
-void generate_hidato(int w, int h, vector< vector<int> > &map)
+void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<int> > &puzzle)
 {
     bool find_answer = false;
     int i,x,y;
@@ -86,10 +98,12 @@ void generate_hidato(int w, int h, vector< vector<int> > &map)
     while (target_solution < max_solution / 5 * 4) {
         target_solution = rand() % max_solution;
     }
+
     vector < vector<int> > checked_map(h,vector<int> (w ,0));
     i = 0;
-    while (i < w * h) {
 
+    while (i < w * h) {
+        /* init array */
         map.clear();
         painted_map.clear();
         map.resize(h,vector<int>(w,0));
@@ -111,9 +125,13 @@ void generate_hidato(int w, int h, vector< vector<int> > &map)
             }
         }
     }
+    
+    cout << "\n\n--------------------------\n";
+    cout << "--------------------------\n";
+    cout << "This is Unique Solution !! \n";
     for (i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
-            cout << map[i][j] << "     "; 
+            cout << map[i][j] << "     ";
         }
         cout << endl;
     }
@@ -162,20 +180,25 @@ void make_unique_solution(int x, int y, int w, int h, int target_solution, int c
     }
     painted_map[y][x] = 0;
 }
-void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map)
+void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector< vector<int> > &puzzle)
 {
     int i,j,punk_num;
     vector < vector<int> > painted_map(h,vector<int> (w ,0));
     while (1) {
+        /* map init */
         map.clear();
         painted_map.clear();
         map.resize(h,vector<int>(w,-1));
         painted_map.resize(h,vector<int> (w ,0));
+
         punk_num = make_punk(w, h, map);
-        if (check_solution(w, h, punk_num, painted_map, map)) {
+        if (check_solution(w, h, punk_num, painted_map, map))
             break;
-        }
     } 
+
+    cout << "--------------------------\n";
+    cout << "--------------------------\n";
+    cout << "\n\nThis is Not Unique Solution !! \n";
     for (i = 0; i < h; ++i) {
         for (j = 0; j < w; ++j) {
             cout << map[i][j] << "     "; 
@@ -304,8 +327,11 @@ void paint_map(int y, int x, int w, int h, int punk_num, int cnt_block, bool &cy
         } else if (map[ty][tx] == -1 && painted_map[ty][tx] == 0) {
             map[y][x] = 0;
             paint_map(ty, tx, w, h, punk_num, cnt_block + 1, cycle_avail, map, painted_map);
+            /* if (!cycle_avail) */
             map[y][x] = -1;
         }
     }
-    painted_map[y][x] = 0;
+    /* back tracking */
+    if (!cycle_avail)
+        painted_map[y][x] = 0;
 }

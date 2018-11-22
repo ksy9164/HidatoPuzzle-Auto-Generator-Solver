@@ -2,10 +2,10 @@
 #define _H_GENERATOR_
 
 #include "common.h"
-void send_msg_to_solver(int w, int h, vector< vector<int> > &map);
+void send_msg_to_solver(int w, int h, vector< vector<int> > &puzzle);
 void adjust_difficulty(int &w, int &h, int time);
-void generate_hidato(int w, int h, vector< vector<int> > &map);
-void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map);
+void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<int> > &puzzle);
+void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map,vector< vector<int> > &puzzle);
 int make_punk(int w,int h, vector< vector<int> > &map);
 int check_answer(int w, int h, vector< vector<int> > &map);
 bool check_solution(int w, int h, int punk_num, vector< vector<int> > &painted_map, vector< vector<int> > &map);

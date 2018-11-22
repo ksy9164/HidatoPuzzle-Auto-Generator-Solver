@@ -17,6 +17,6 @@ using namespace std;
 #define F_QUIZE "./../result/quize.txt"
 #define F_ANSWER "./../result/answer.txt"
 
-#define GENERATOR_HANDLE 1
+#define GENERATOR_HANDLE 0
 
 #endif
