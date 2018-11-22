@@ -129,7 +129,6 @@ void send_msg_to_generator(vector< vector<int> > &ans)
 {
     ofstream out;
     out.open(F_ANSWER);
-    out << ans.size() << " " << ans[0].size() << "\n";
     for (int i = 0; i < (int)ans.size(); ++i) {
         for (int j = 0; j < (int)ans[0].size(); ++j) {
             out << ans[i][j] << " ";
