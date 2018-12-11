@@ -1,0 +1,32 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	Makefile	/^CC=g++$/;"	m
+F_ANSWER	common.h	17;"	d
+F_QUIZE	common.h	16;"	d
+GENERATOR_HANDLE	common.h	19;"	d
+LDFLAGS	Makefile	/^LDFLAGS=-lpthread -std=c++11$/;"	m
+SOURCES	Makefile	/^SOURCES=main.cpp generator.cpp solver.cpp$/;"	m
+TARGET	Makefile	/^TARGET=autoHidato$/;"	m
+_H_COMMON_	common.h	2;"	d
+_H_GENERATOR_	generator.h	2;"	d
+_H_SOLVER_	solver.h	2;"	d
+adjust_difficulty	generator.cpp	/^void adjust_difficulty(int &w, int &h, int time)$/;"	f
+check_answer	generator.cpp	/^int check_answer(int w, int h, vector< vector<int> > &map)$/;"	f
+check_duplication	solver.cpp	/^bool check_duplication(vector< vector<int> > &ans)$/;"	f
+check_punk	generator.cpp	/^bool check_punk(int p_w, int p_h, int w, int h, vector< vector<int> >&map)$/;"	f
+check_solution	generator.cpp	/^bool check_solution(int w, int h, int punk_num, vector< vector<int> > &map)$/;"	f
+generate_hidato	generator.cpp	/^void generate_hidato(int w, int h, vector< vector<int> > &map)$/;"	f
+generate_not_unique_hidato	generator.cpp	/^void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map)$/;"	f
+main	main.cpp	/^int main(void)$/;"	f
+make_grid_hidato	generator.cpp	/^int make_grid_hidato(int w, int h, vector< vector<int> > &map)$/;"	f
+make_punk	generator.cpp	/^int make_punk(int w,int h, vector< vector<int> > &map)$/;"	f
+paint_map	generator.cpp	/^void paint_map(int y, int x, int w, int h, int cnt, int cnt_block, bool &cycle_avail, vector< vector<int> > &map, vector< vector<int> > &checked_map)$/;"	f
+send_msg_to_generator	solver.cpp	/^void send_msg_to_generator(vector< vector<int> > &ans)$/;"	f
+send_msg_to_solver	generator.cpp	/^void send_msg_to_solver(int w, int h, vector< vector<int> > &map)$/;"	f
+solve_hidato_puzzle	solver.cpp	/^void solve_hidato_puzzle(vector< vector<int> > &ans)$/;"	f
+start_generate_hidato	generator.cpp	/^void *start_generate_hidato (void *sem_id)$/;"	f
+start_solver_hidato	solver.cpp	/^void *start_solver_hidato (void *sem_id)$/;"	f
