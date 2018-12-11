@@ -33,3 +33,7 @@
 
 # Txt file
 *.txt
+
+# core, tags
+core
+tags
