@@ -94,8 +94,7 @@ int check_answer(int w, int h, vector< vector<int> > &answer)
             }
         } 
     }
-    cout << "\n The answer is correct !! \n";
-    cout << "--------------------------\n";
+    cout << "\n The Solver's solution is correct answer !! \n";
     cout << "--------------------------\n";
     fflush(stdout);
     return 1;
@@ -160,19 +159,8 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
     }
     
     /* Padding Map! */
-    cout << "\033[2J\033[1;1H";
     padding(map,answer);
-    
-    fflush(stdout);
-    cout << "--------------------------\n";
-    cout << "This is Unique Solution !! \n";
-    for (i = 0; i < h; ++i) {
-        for (int j = 0; j < w; ++j) {
-            cout << map[i][j] << "     ";
-        }
-        cout << endl;
-    }
-    fflush(stdout);
+    print_map(map);
     return;
 }
 void make_unique_solution(int x, int y, int w, int h, int target_solution, int cnt, bool &find_answer,vector< vector <int> > &painted_map, vector< vector <int> > &map)
@@ -471,4 +459,18 @@ add_padding:
             }
         }
     }
+}
+void print_map(vector< vector <int> > &map )
+{
+    cout << "\033[2J\033[1;1H";
+    cout << "--------------------------\n";
+    cout << "This is Unique Solution !! \n";
+    for (int i = 0; i < map.size(); ++i) {
+        for (int j = 0; j < map[0].size(); ++j) {
+            cout << map[i][j] << "     ";
+        }
+        cout << endl;
+    }
+    fflush(stdout);
+    return;
 }

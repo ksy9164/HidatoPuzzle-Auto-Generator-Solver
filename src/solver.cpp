@@ -1,5 +1,4 @@
 #include "solver.h"
-
 void *start_solver_hidato (void *sem_id)
 {
     sem_t *sem = (sem_t *)sem_id;
@@ -64,16 +63,9 @@ void solve_hidato_puzzle(vector< vector<int> > &ans)
         }
     }
 
-done : 
-    cout << "--------------------------\n";
-    cout << "---- This is solver!! ----\n";
-    cout << "--------------------------\n";
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < w; j++) {
-            cout << ans[i][j] << "     ";
-        }
-        cout << endl;
-    }
+done :
+    print_ans(ans);
+    return;
 }
 
 void check_hidato(int y, int x, int h, int w, int cnt_block, int cnt, bool &solving_puzzle, vector< vector<int> > &quize, vector< vector<int> > &ans)
@@ -144,4 +136,18 @@ void send_msg_to_generator(vector< vector<int> > &ans)
 
     out.close();
     return ;
+}
+
+void print_ans(vector< vector <int> > &ans)
+{
+    cout << "--------------------------\n";
+    cout << "---- This is solver!! ----\n";
+    cout << "--------------------------\n";
+    for (int i = 0; i < ans.size(); ++i) {
+        for (int j = 0; j < ans[0].size(); j++) {
+            cout << ans[i][j] << "     ";
+        }
+        cout << endl;
+    }
+    return;
 }
