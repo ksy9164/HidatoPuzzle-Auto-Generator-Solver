@@ -41,7 +41,6 @@ void *start_generate_hidato (void *sem_id)
             w = rand()%11;
             h = rand()%11;
         } while (w < 3 || h < 3 || abs(w - h) > 2);
-
         map.resize(h);
         answer.resize(h);
 
@@ -165,15 +164,16 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
         }
     }
     
+    /* Padding Map! */
     cout << "\033[2J\033[1;1H";
+    padding(map,answer);
+    
     fflush(stdout);
     cout << "--------------------------\n";
     cout << "This is Unique Solution !! \n";
-    cout << "The size is \n " << h << " " << w << endl;
     for (i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
             cout << map[i][j] << "     ";
-            answer[i][j] = map[i][j];
         }
         cout << endl;
     }
@@ -379,4 +379,101 @@ void paint_map(int y, int x, int w, int h, int punk_num, int cnt_block, bool &cy
     /* back tracking */
     if (!cycle_avail)
         painted_map[y][x] = 0;
+}
+
+
+void padding(vector< vector <int> > &map, vector< vector <int> > &answer)
+{
+    int h = map.size();
+    int w = map[0].size();
+    int origin_cnt = 0;
+    int pad_num = 0;
+
+    bool is_added = false;
+    
+    int x_pos[8] = {-1,-1,-1,0,0,1,1,1};
+    int y_pos[8] = {1,0,-1,1,-1,1,0,-1};
+    
+    vector< vector <int> > check;
+    check.resize(h);
+    for (int i = 0; i < h; ++i)
+        check[i].resize(w,1);
+    
+
+    for (int i = 0; i < h; ++i)
+        for (int j = 0; j < w; j++)
+            if (map[i][j] != 0)
+            {
+                origin_cnt++;
+                check[i][j] = 0;
+            }
+
+    while (pad_num < (h + w) / 3 * 2) {
+        int y1_pad = 0;
+        int x1_pad = 0;
+        int y2_pad = 0;
+        int x2_pad = 0;
+        int y = rand() % h;
+        int x = rand() % w;
+        
+        is_added = false;
+
+        while (check[y][x] != 1) {
+            y = rand() % h;
+            x = rand() % w;
+        }
+
+        vector <int> pad_candi_y;
+        vector <int> pad_candi_x;
+        
+        for (int i = 0; i < 8; ++i) {
+            int t_y = y + y_pos[i];
+            int t_x = x + x_pos[i];
+            if (t_y < 0 || t_x < 0 || t_y >= h || t_x >= w || map[t_y][t_x] == 0 || check[t_y][t_x] == 1)
+                continue;
+            pad_candi_y.push_back(t_y);
+            pad_candi_x.push_back(t_x);
+        }
+        for (int i = 0; i < pad_candi_x.size(); ++i) {
+            for (int j = i + 1; j < pad_candi_x.size(); j++) {
+                y1_pad = pad_candi_y[i];                
+                x1_pad = pad_candi_x[i];
+                y2_pad = pad_candi_y[j];   
+                x2_pad = pad_candi_x[j]; 
+                if (abs(map[y1_pad][x1_pad] - map[y2_pad][x2_pad]) == 1) {
+                    is_added = true;
+                    goto add_padding;
+                }
+            }
+        }
+        if(is_added == false)
+            continue;
+add_padding:
+        check[y][x] = -1;
+        int standard;
+
+        if (map[y1_pad][x1_pad] - map[y2_pad][x2_pad] == 1)
+            standard = map[y2_pad][x2_pad];
+        else
+            standard = map[y1_pad][x1_pad];
+        map[y][x] = standard + 1;
+
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; j++) {
+                if (map[i][j] > standard && !(i == y && j == x)) {
+                    map[i][j]++;
+                }
+            }
+        }
+        pad_num++;
+    }
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            answer[i][j] = map[i][j];
+            if (check[i][j] == 0 && map[i][j] != 1 && map[i][j] != origin_cnt + pad_num) {
+                map[i][j] = -1;
+            }
+        }
+    }
 }
