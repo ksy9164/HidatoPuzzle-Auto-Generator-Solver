@@ -38,8 +38,13 @@ void solve_hidato_puzzle(vector< vector<int> > &ans)
     in >> h >> w;
     vector< vector<int> > quize;
 
-    ans.resize(h,vector<int>(w,0));
-    quize.resize(h,vector<int>(w,0));
+    ans.resize(h);
+    quize.resize(h);
+
+    for (int i = 0; i < h; ++i) {
+        ans[i].resize(w,0);
+        quize[i].resize(w,0);
+    }
 
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; j++) {
@@ -48,7 +53,8 @@ void solve_hidato_puzzle(vector< vector<int> > &ans)
                 cnt_block++;
         }
     }
-
+    in.close();
+    
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; j++) {
             if (quize[i][j] == -1 || quize[i][j] == 1)
@@ -59,18 +65,18 @@ void solve_hidato_puzzle(vector< vector<int> > &ans)
     }
 
 done : 
+    cout << "--------------------------\n";
     cout << "---- This is solver!! ----\n";
+    cout << "--------------------------\n";
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; j++) {
-            cout << ans[i][j] << " ";
+            cout << ans[i][j] << "     ";
         }
         cout << endl;
     }
-    cout << "--------------------------\n";
-    cout << "--------------------------\n";
 }
 
-void check_hidato(int y, int x, int w, int h, int cnt_block, int cnt, bool &solving_puzzle, vector< vector<int> > &quize, vector< vector<int> > &ans)
+void check_hidato(int y, int x, int h, int w, int cnt_block, int cnt, bool &solving_puzzle, vector< vector<int> > &quize, vector< vector<int> > &ans)
 {
     /* if solved? */
     if (solving_puzzle)
@@ -104,7 +110,7 @@ void check_hidato(int y, int x, int w, int h, int cnt_block, int cnt, bool &solv
         if (ty < 0 || tx < 0 || tx >= w || ty >= h )
             continue;
         else
-            check_hidato(ty, tx, w, h, cnt_block, cnt + 1, solving_puzzle, quize, ans);
+            check_hidato(ty, tx, h, w, cnt_block, cnt + 1, solving_puzzle, quize, ans);
     }
     if (map_valid)
         quize[y][x] = cnt;

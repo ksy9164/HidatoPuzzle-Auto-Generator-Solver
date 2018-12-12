@@ -6,8 +6,8 @@ void *start_generate_hidato (void *sem_id)
     sem_t *generator = &sem[0];
     sem_t *solver = &sem[1];
 
-    int w = 5;
-    int h = 5;
+    int w = 1;
+    int h = 1;
     
     clock_t begin,end;
     int time_check;
@@ -37,9 +37,18 @@ void *start_generate_hidato (void *sem_id)
             adjust_difficulty(w,h,time_check);
         }
 
-        map.resize(h,vector<int>(w,-1));
-        answer.resize(h,vector<int>(w,-1));
-        
+        do {
+            w = rand()%11;
+            h = rand()%11;
+        } while (w < 3 || h < 3 || abs(w - h) > 2);
+
+        map.resize(h);
+        answer.resize(h);
+
+        for (int i = 0; i < h; ++i) {
+            map[i].resize(w,-1);
+            answer[i].resize(w,-1);
+        }
         switch (GENERATOR_HANDLE) {
             case 0:
                 generate_not_unique_hidato(w,h,map,answer);
@@ -72,17 +81,46 @@ int check_answer(int w, int h, vector< vector<int> > &answer)
 {
     ifstream in;
     in.open(F_ANSWER);
+    
+    vector< vector<int> > solver_ans;
+    solver_ans.resize(h);
+    for (int i = 0; i < h; ++i) {
+        solver_ans[i].resize(w,-1);
+    }
 
-    int t;
+    for (int i = 0; i < h; ++i)
+        for (int j = 0; j < w; j++)
+                in >> solver_ans[i][j];
+    in.close(); 
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; j++) {
-            in >> t;
-            if (t != answer[i][j]) {
-                return 0;
+            if (solver_ans[i][j] != answer[i][j]) {
+                cout << "!!!! " << i << " " << j << " is diff " << endl;
+                goto err;
             }
         } 
     }
+    cout << "\n The answer is correct !! \n";
+    cout << "--------------------------\n";
+    cout << "--------------------------\n";
+    fflush(stdout);
     return 1;
+err :
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            cout << answer[i][j] << " ";
+        }
+        cout << endl;
+    }
+        cout << endl;
+        cout << endl;
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; j++) {
+            cout << solver_ans[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
 }
 void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<int> > &answer)
 {
@@ -127,9 +165,11 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
         }
     }
     
-    cout << "\n\n--------------------------\n";
+    cout << "\033[2J\033[1;1H";
+    fflush(stdout);
     cout << "--------------------------\n";
     cout << "This is Unique Solution !! \n";
+    cout << "The size is \n " << h << " " << w << endl;
     for (i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
             cout << map[i][j] << "     ";
@@ -137,6 +177,7 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
         }
         cout << endl;
     }
+    fflush(stdout);
     return;
 }
 void make_unique_solution(int x, int y, int w, int h, int target_solution, int cnt, bool &find_answer,vector< vector <int> > &painted_map, vector< vector <int> > &map)
@@ -197,10 +238,10 @@ void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector
         if (check_solution(w, h, punk_num, painted_map, map ,answer))
             break;
     } 
-
+    cout << "\033[2J\033[1;1H";
     cout << "--------------------------\n";
-    cout << "--------------------------\n";
-    cout << "\n\nThis is Not Unique Solution !! \n";
+    cout << "This is Not Unique Solution !! \n";
+    cout << "The size is \n " << h << " " << w << endl;
     for (i = 0; i < h; ++i) {
         for (j = 0; j < w; ++j) {
             cout << map[i][j] << "     "; 
