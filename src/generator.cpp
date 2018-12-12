@@ -20,7 +20,7 @@ void *start_generate_hidato (void *sem_id)
     while (1) {
         sem_wait(generator);
         end = clock();
-        sleep(1);
+        usleep(SLEEP_TIME);
         if (iter > 0)
             check = check_answer(w,h,answer);
         if (check == 0) {
