@@ -11,7 +11,6 @@ void *start_solver_hidato (void *sem_id)
 
     while (1) {
         sem_wait(solver);
-        sleep(1);
         check = check_duplication(ans);
         if (check == true) {
             cout << "\n This hidato pulzzle has not unique solution \n";

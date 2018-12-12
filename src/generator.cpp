@@ -236,8 +236,8 @@ void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector
 void adjust_difficulty(int &w, int &h, int time)
 {
     do {
-        w = rand()%11;
-        h = rand()%11;
+        w = rand()%9;
+        h = rand()%9;
     } while (w < 3 || h < 3 || abs(w - h) > 2);
 }
 int make_punk(int w,int h, vector< vector<int> > &map)
@@ -391,7 +391,7 @@ void padding(vector< vector <int> > &map, vector< vector <int> > &answer)
                 check[i][j] = 0;
             }
 
-    while (pad_num < (h + w) / 3 * 2) {
+    while (pad_num < ((h / 3) * (w / 3))) {
         int y1_pad = 0;
         int x1_pad = 0;
         int y2_pad = 0;
@@ -450,12 +450,23 @@ add_padding:
         }
         pad_num++;
     }
-
+    int cnt_punk;
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; j++) {
             answer[i][j] = map[i][j];
             if (check[i][j] == 0 && map[i][j] != 1 && map[i][j] != origin_cnt + pad_num) {
                 map[i][j] = -1;
+                cnt_punk = 0;
+                for (int k = 0; k < 8; k++) {
+                    int t_y = i + y_pos[k];
+                    int t_x = j + x_pos[k];
+                    if (t_y > 0 && t_y < h &&
+                            t_x > 0 && t_x < w &&
+                            check[t_y][t_x] == -1)
+                        cnt_punk++;
+                }
+                if (cnt_punk >= 2)
+                    map[i][j] = answer[i][j];
             }
         }
     }
