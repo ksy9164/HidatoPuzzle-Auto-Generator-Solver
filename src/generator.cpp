@@ -6,8 +6,8 @@ void *start_generate_hidato (void *sem_id)
     sem_t *generator = &sem[0];
     sem_t *solver = &sem[1];
 
-    int w = 1;
-    int h = 1;
+    int w = 5;
+    int h = 5;
     
     clock_t begin,end;
     int time_check;
@@ -36,11 +36,6 @@ void *start_generate_hidato (void *sem_id)
             time_check = end - begin;
             adjust_difficulty(w,h,time_check);
         }
-
-        do {
-            w = rand()%11;
-            h = rand()%11;
-        } while (w < 3 || h < 3 || abs(w - h) > 2);
         map.resize(h);
         answer.resize(h);
 
@@ -252,10 +247,10 @@ void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector
 }
 void adjust_difficulty(int &w, int &h, int time)
 {
-    /* TODO */
-    /* 
-     *     adjust difficulty ( w and h )
-     *     by referring to the time */
+    do {
+        w = rand()%11;
+        h = rand()%11;
+    } while (w < 3 || h < 3 || abs(w - h) > 2);
 }
 int make_punk(int w,int h, vector< vector<int> > &map)
 {
