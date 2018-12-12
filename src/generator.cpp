@@ -391,7 +391,7 @@ void padding(vector< vector <int> > &map, vector< vector <int> > &answer)
                 check[i][j] = 0;
             }
 
-    while (pad_num < ((h / 3) * (w / 3))) {
+    while (pad_num < ((h / 3) * (w / 3) + 1)) {
         int y1_pad = 0;
         int x1_pad = 0;
         int y2_pad = 0;
@@ -460,8 +460,8 @@ add_padding:
                 for (int k = 0; k < 8; k++) {
                     int t_y = i + y_pos[k];
                     int t_x = j + x_pos[k];
-                    if (t_y > 0 && t_y < h &&
-                            t_x > 0 && t_x < w &&
+                    if (t_y >= 0 && t_y < h &&
+                            t_x >= 0 && t_x < w &&
                             check[t_y][t_x] == -1)
                         cnt_punk++;
                 }

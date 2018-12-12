@@ -12,12 +12,14 @@
 #include <cstdlib>
 #include <queue>
 #include <cstring>
+#include <sys/resource.h>
 using namespace std;
 
 #define F_QUIZE "./../result/quize.txt"
 #define F_ANSWER "./../result/answer.txt"
 
 #define GENERATOR_HANDLE 1
-#define SLEEP_TIME 1500000
+/* #define SLEEP_TIME 1000000 */
+#define SLEEP_TIME 1
 
 #endif

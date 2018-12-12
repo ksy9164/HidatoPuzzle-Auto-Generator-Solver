@@ -7,7 +7,22 @@ int main(void)
     pthread_t p_thread[2];
     int status;
     sem_t sem_id[2];
+    
+    const rlim_t kStackSize = 16 * 1024 * 1024;
+    struct rlimit rl;
+    int result;
 
+    result = getrlimit(RLIMIT_STACK, &rl);
+    if (result == 0)
+    {
+        if (rl.rlim_cur < kStackSize)
+        {
+            rl.rlim_cur = kStackSize;
+            result = setrlimit(RLIMIT_STACK, &rl);
+            cout << rl.rlim_cur << " is after.. \n";
+        }
+    }
+    
     sem_init(&sem_id[0], 0, 1);
     sem_init(&sem_id[1], 0, 0);
     
