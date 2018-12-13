@@ -19,7 +19,6 @@ void *start_generate_hidato (void *sem_id)
     srand((unsigned int)time(NULL));
     while (1) {
         sem_wait(generator);
-        end = clock();
         usleep(SLEEP_TIME);
         if (iter > 0)
             check = check_answer(w,h,answer);
@@ -43,6 +42,7 @@ void *start_generate_hidato (void *sem_id)
             map[i].resize(w,-1);
             answer[i].resize(w,-1);
         }
+        
         switch (GENERATOR_HANDLE) {
             case 0:
                 generate_not_unique_hidato(w,h,map,answer);
@@ -51,9 +51,9 @@ void *start_generate_hidato (void *sem_id)
                 generate_hidato(w,h,map,answer);
                 break;
         }
+        
         send_msg_to_solver(w,h,map);
         sem_post(solver);
-        begin = clock();
         iter++;
     }
 }
@@ -127,7 +127,7 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
 
     int target_solution = 0;
     /* set difficulty */
-    while (target_solution < max_solution / 5 * 4) {
+    while (target_solution < max_solution / 5 * 3 || target_solution > max_solution/5 * 4) {
         target_solution = rand() % max_solution;
     }
 
@@ -140,7 +140,12 @@ void generate_hidato(int w, int h, vector< vector<int> > &map, vector< vector<in
         painted_map.clear();
         map.resize(h,vector<int>(w,0));
         painted_map.resize(h,vector<int>(w,0));
-        
+        for (int j = 0; j < h; j++) {
+            for (int k = 0; k < w; k++) {
+                painted_map[j][k] = 0;
+                map[j][k] = 0;
+            }
+        } 
         x = rand() % w;
         y = rand() % h;
         if (checked_map[y][x] == 1) {
@@ -235,9 +240,10 @@ void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector
 void adjust_difficulty(int &w, int &h, int time)
 {
     do {
-        w = rand()%9;
-        h = rand()%9;
+        w = rand()%11;
+        h = rand()%11;
     } while (w < 3 || h < 3 || abs(w - h) > 2);
+    w = h;
 }
 int make_punk(int w,int h, vector< vector<int> > &map)
 {
@@ -390,7 +396,7 @@ void padding(vector< vector <int> > &map, vector< vector <int> > &answer)
                 check[i][j] = 0;
             }
 
-    while (pad_num < ((h / 3) * (w / 3) + 1)) {
+    while (pad_num < origin_cnt / 2) {
         int y1_pad = 0;
         int x1_pad = 0;
         int y2_pad = 0;
