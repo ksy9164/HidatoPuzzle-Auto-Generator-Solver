@@ -19,7 +19,6 @@ using namespace std;
 #define F_ANSWER "./../result/answer.txt"
 
 #define GENERATOR_HANDLE 1
-/* #define SLEEP_TIME 1000000 */
-#define SLEEP_TIME 1
+#define SLEEP_TIME 1000000
 
 #endif

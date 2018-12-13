@@ -224,7 +224,6 @@ void generate_not_unique_hidato(int w, int h, vector< vector<int> > &map, vector
     cout << "\033[2J\033[1;1H";
     cout << "--------------------------\n";
     cout << "This is Not Unique Solution !! \n";
-    cout << "The size is \n " << h << " " << w << endl;
     for (i = 0; i < h; ++i) {
         for (j = 0; j < w; ++j) {
             cout << map[i][j] << "     "; 
