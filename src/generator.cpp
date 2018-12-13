@@ -425,13 +425,13 @@ void padding(vector< vector <int> > &map, vector< vector <int> > &answer)
                 x2_pad = pad_candi_x[j]; 
                 if (abs(map[y1_pad][x1_pad] - map[y2_pad][x2_pad]) == 1) {
                     is_added = true;
-                    goto add_padding;
+                    goto ADD_PADDING;
                 }
             }
         }
         if(is_added == false)
             continue;
-add_padding:
+ADD_PADDING:
         check[y][x] = -1;
         int standard;
 
@@ -476,6 +476,7 @@ void print_map(vector< vector <int> > &map )
     cout << "\033[2J\033[1;1H";
     cout << "--------------------------\n";
     cout << "This is Unique Solution !! \n";
+    cout << "Size is " << map.size() << " " << map[0].size();
     for (int i = 0; i < map.size(); ++i) {
         for (int j = 0; j < map[0].size(); ++j) {
             cout << map[i][j] << "     ";

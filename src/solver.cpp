@@ -5,6 +5,9 @@ void *start_solver_hidato (void *sem_id)
     sem_t *generator = &sem[0];
     sem_t *solver = &sem[1];
 
+    clock_t begin,end;
+    int time_check;
+    
     vector< vector<int> > ans;
     
     bool check = false;
@@ -20,7 +23,16 @@ void *start_solver_hidato (void *sem_id)
             return NULL;
         }
 
+        begin = clock();
+        
         solve_hidato_puzzle(ans);
+        
+        end = clock();
+        ofstream out;
+        out.open("time.txt", std::ios_base::app);
+        out << "DFS Solver " << end - begin << endl;
+        out.close();
+        
         send_msg_to_generator(ans);
         sem_post(generator);
     }

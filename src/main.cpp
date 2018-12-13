@@ -19,7 +19,6 @@ int main(void)
         {
             rl.rlim_cur = kStackSize;
             result = setrlimit(RLIMIT_STACK, &rl);
-            cout << rl.rlim_cur << " is after.. \n";
         }
     }
     
