@@ -475,7 +475,6 @@ void print_map(vector< vector <int> > &map )
     cout << "\033[2J\033[1;1H";
     cout << "--------------------------\n";
     cout << "This is Unique Solution !! \n";
-    cout << "Size is " << map.size() << " " << map[0].size();
     for (int i = 0; i < map.size(); ++i) {
         for (int j = 0; j < map[0].size(); ++j) {
             cout << map[i][j] << "     ";
